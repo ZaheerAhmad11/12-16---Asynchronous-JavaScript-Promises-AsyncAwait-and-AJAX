@@ -450,47 +450,308 @@
 // Promise.resolve('ABC').then(x => console.log(x));
 // Promise.reject(new Error('Problem!')).catch(x => console.error(x));
 
+// -----------------------17
+// -------------------------Promisifying the Geolocation API
+// const btn = document.querySelector('.btn-country');
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
 
+// const countriesContainer = document.querySelector('.countries');
+// const renderCountry = function (data, className = '') {
+//   const html = `<article class="country ${className}" >
+//      <img class="country__img" src="${data.flags.png}" />
+//      <div class="country__data">
+//      <h3 class="country__name">${data.name.common}</h3>
+//      <h4 class="country__region">${data.region}</h4>
+//      <p class="country__row">
+//      <span>👫</span>${(data.population / 1000000).toFixed(1)} M
+//      </p>
+//      <p class="country__row">
+//      <span>🗣️</span>${
+//        Object.values(data.languages)[1] || Object.values(data.languages)[0]
+//      }
+//     </p>
+//     <p class="country__row"><span>💰</span>${Object.values(data.currencies)[0].name}</p></div>
+//     </article>
+//     `;
+//   countriesContainer.insertAdjacentHTML('beforeend', html);
+//   countriesContainer.style.opacity = 1;
+// };
 
+// //With Asynch
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v3.1/name/${country}`)
+//     .then(response => response.json())
+//     .then(data => renderCountry(data[0]));
+// };
 
+// const whereAmI = function () {
+//   getPosition()
+//     .then(pos => {
+//       const { latitude: lat, longitude: lng } =
+//       pos.coords;
+//       return fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+//     })
+//     .then(res => {
+//       if (!res.ok) throw new Error(`Problem with geocoding! ${res.status}`);
+//       return res.json();
+//     })
+//     .then(data => {
+//       console.log(data);
+//       console.log(`You Are in ${data.address.village}, ${data.address.country}`);
+//       getCountryData(`${data.address.country}`);
+//     })
+//     .catch(err => console.error(`${err.message} 💥`));
+// };
 
+// btn.addEventListener('click', whereAmI);
 
+// -----------------------18 Coding Challenge # 2
+// const wait = function (seconds) {
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, seconds * 1000);
+//   });
+// };
 
+// const imgContainer = document.querySelector('.images');
 
+// const createImage = function (imgPath) {
+//   return new Promise(function (resolve, reject) {
+//     const img = document.createElement('img');
+//     img.src = imgPath;
 
+//     img.addEventListener('load', function () {
+//       imgContainer.append(img);
+//       resolve(img);
+//     });
 
+//     img.addEventListener('error', function () {
+//       reject(new Error('Image not found'));
+//     });
+//   });
+// };
 
+// let currentImg;
 
+// createImage('img/img-1.jpg')
+//   .then(img => {
+//     currentImg = img;
+//     console.log('Image 1 loaded');
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currentImg.style.display = 'none';
+//     return createImage('img/img-2.jpg');
+//   })
+//   .then(img => {
+//     currentImg = img;
+//     console.log('Image 2 loaded');
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currentImg.style.display = 'none';
+//   })
+//   .catch(err => console.error(err));
 
+// -----------------------19
+// -------------------------Consuming Promises with AsyncAwait
+// const btn = document.querySelector('.btn-country');
+// const countriesContainer = document.querySelector('.countries');
 
+// const renderCountry = function (data, className = '') {
+//   const html = `<article class="country ${className}" >
+//      <img class="country__img" src="${data.flags.png}" />
+//      <div class="country__data">
+//      <h3 class="country__name">${data.name.common}</h3>
+//      <h4 class="country__region">${data.region}</h4>
+//      <p class="country__row">
+//      <span>👫</span>${(data.population / 1000000).toFixed(1)} M
+//      </p>
+//      <p class="country__row">
+//      <span>🗣️</span>${
+//        Object.values(data.languages)[1] || Object.values(data.languages)[0]
+//      }
+//     </p>
+//     <p class="country__row"><span>💰</span>${Object.values(data.currencies)[0].name}</p></div>
+//     </article>
+//     `;
+//   countriesContainer.insertAdjacentHTML('beforeend', html);
+//   countriesContainer.style.opacity = 1;
+// };
 
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
 
+// const whereAmI = async function (country) {
+//   // Geo Location
+//   const pos = await getPosition();
+//   const { latitude: lat, longitude: lng } = pos.coords;
+//   // Reverse Coding
+//   const resGeo =  await fetch(
+//     `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
+//   )
+//   const dataGeo = await resGeo.json()
 
+//   const res = await fetch(`https://restcountries.com/v3.1/name/${dataGeo.address.country}`);
+//   const data = await res.json();
+//   console.log(data[0]);
+//   renderCountry(data[0]);
+// };
 
+//  whereAmI();
+//  console.log(`Second`)
 
+// -----------------------20
+// -------------------------Error Handling With try...catch
+// const btn = document.querySelector('.btn-country');
+// const countriesContainer = document.querySelector('.countries');
 
+// const renderError = function (msg) {
+//   countriesContainer.insertAdjacentText('beforeend', msg);
+//   countriesContainer.style.opacity = 1;
+// };
 
+// const renderCountry = function (data, className = '') {
+//   const html = `<article class="country ${className}" >
+//      <img class="country__img" src="${data.flags.png}" />
+//      <div class="country__data">
+//      <h3 class="country__name">${data.name.common}</h3>
+//      <h4 class="country__region">${data.region}</h4>
+//      <p class="country__row">
+//      <span>👫</span>${(data.population / 1000000).toFixed(1)} M
+//      </p>
+//      <p class="country__row">
+//      <span>🗣️</span>${
+//        Object.values(data.languages)[1] || Object.values(data.languages)[0]
+//      }
+//     </p>
+//     <p class="country__row"><span>💰</span>${Object.values(data.currencies)[0].name}</p></div>
+//     </article>
+//     `;
+//   countriesContainer.insertAdjacentHTML('beforeend', html);
+//   countriesContainer.style.opacity = 1;
+// };
 
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
 
+// const whereAmI = async function (country) {
+//   try {
+//     // Geo Location
+//     const pos = await getPosition();
+//     const { latitude: lat, longitude: lng } = pos.coords;
+//     // Reverse Coding
+//     const resGeo = await fetch(
+//       `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
+//     )
+//     if (!resGeo.ok) throw new Error(`Problem getting Location Data..`)
+//     const dataGeo = await resGeo.json();
 
+//     const res = await fetch(
+//       `https://restcountries.com/v3.1/name/${dataGeo.address.country}`,
+//     );
+//      if (!res.ok) throw new Error(`Problem getting Location Country..`)
+//     const data = await res.json();
+//     console.log(data[0]);
+//     renderCountry(data[0]);
+//   } catch (err) {
+//     console.error(`${err}💥`);
+//     renderError(`Something went to wrong💥${err.message} `);
+//   }
+// };
 
+// whereAmI();
+// console.log(`Second`);
 
+// -----------------------21
+// -------------------------Returning Values from Async Functions
+const btn = document.querySelector('.btn-country');
+const countriesContainer = document.querySelector('.countries');
 
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  countriesContainer.style.opacity = 1;
+};
 
+const renderCountry = function (data, className = '') {
+  const html = `<article class="country ${className}" >
+     <img class="country__img" src="${data.flags.png}" />
+     <div class="country__data">
+     <h3 class="country__name">${data.name.common}</h3>
+     <h4 class="country__region">${data.region}</h4>
+     <p class="country__row">
+     <span>👫</span>${(data.population / 1000000).toFixed(1)} M
+     </p>
+     <p class="country__row">
+     <span>🗣️</span>${
+       Object.values(data.languages)[1] || Object.values(data.languages)[0]
+     }
+    </p>
+    <p class="country__row"><span>💰</span>${Object.values(data.currencies)[0].name}</p></div>
+    </article>
+    `;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
 
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
 
+const whereAmI = async function (country) {
+  try {
+    // Geo Location
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
+    // Reverse Coding
+    const resGeo = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
+    );
+    if (!resGeo.ok) throw new Error(`Problem getting Location Data..`);
+    const dataGeo = await resGeo.json();
 
+    const res = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo.address.country}`,
+    );
+    if (!res.ok) throw new Error(`Problem getting Location Country..`);
+    const data = await res.json();
+    renderCountry(data[0]);
+    return `You are in ${dataGeo.address.village},${dataGeo.address.country}`;
+  } catch (err) {
+    console.error(`${err}💥`);
+    renderError(`Something went to wrong💥${err.message} 
+    `);
+    throw err;
+  }
+};
 
+// const city = whereAmI();
+// console.log(city);
+console.log(`1: Will get Location`);
+// whereAmI()
+//   .then(city => console.log(`2: ${city}`))
+//   .catch(err => console.error(`2: ${err.message}`))
+//   .finally(() => {
+//     console.log(`3: Finish getting Location`);
+//   });
+// console.log(`Second`);
 
-
-
-
-
-
-
-
-
-
-
-
-
+(async function () {
+  try{
+   const city = await whereAmI()
+  console.log(`2: ${city}`)
+  }
+  catch(err) { console.error(`2: ${err.message}`)}
+  console.log(`3: Finish getting Location`);
+})();
