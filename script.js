@@ -674,71 +674,71 @@
 
 // -----------------------21
 // -------------------------Returning Values from Async Functions
-const btn = document.querySelector('.btn-country');
-const countriesContainer = document.querySelector('.countries');
+// const btn = document.querySelector('.btn-country');
+// const countriesContainer = document.querySelector('.countries');
 
-const renderError = function (msg) {
-  countriesContainer.insertAdjacentText('beforeend', msg);
-  countriesContainer.style.opacity = 1;
-};
+// const renderError = function (msg) {
+//   countriesContainer.insertAdjacentText('beforeend', msg);
+//   countriesContainer.style.opacity = 1;
+// };
 
-const renderCountry = function (data, className = '') {
-  const html = `<article class="country ${className}" >
-     <img class="country__img" src="${data.flags.png}" />
-     <div class="country__data">
-     <h3 class="country__name">${data.name.common}</h3>
-     <h4 class="country__region">${data.region}</h4>
-     <p class="country__row">
-     <span>👫</span>${(data.population / 1000000).toFixed(1)} M
-     </p>
-     <p class="country__row">
-     <span>🗣️</span>${
-       Object.values(data.languages)[1] || Object.values(data.languages)[0]
-     }
-    </p>
-    <p class="country__row"><span>💰</span>${Object.values(data.currencies)[0].name}</p></div>
-    </article>
-    `;
-  countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
-};
+// const renderCountry = function (data, className = '') {
+//   const html = `<article class="country ${className}" >
+//      <img class="country__img" src="${data.flags.png}" />
+//      <div class="country__data">
+//      <h3 class="country__name">${data.name.common}</h3>
+//      <h4 class="country__region">${data.region}</h4>
+//      <p class="country__row">
+//      <span>👫</span>${(data.population / 1000000).toFixed(1)} M
+//      </p>
+//      <p class="country__row">
+//      <span>🗣️</span>${
+//        Object.values(data.languages)[1] || Object.values(data.languages)[0]
+//      }
+//     </p>
+//     <p class="country__row"><span>💰</span>${Object.values(data.currencies)[0].name}</p></div>
+//     </article>
+//     `;
+//   countriesContainer.insertAdjacentHTML('beforeend', html);
+//   countriesContainer.style.opacity = 1;
+// };
 
-const getPosition = function () {
-  return new Promise(function (resolve, reject) {
-    navigator.geolocation.getCurrentPosition(resolve, reject);
-  });
-};
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
 
-const whereAmI = async function (country) {
-  try {
-    // Geo Location
-    const pos = await getPosition();
-    const { latitude: lat, longitude: lng } = pos.coords;
-    // Reverse Coding
-    const resGeo = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
-    );
-    if (!resGeo.ok) throw new Error(`Problem getting Location Data..`);
-    const dataGeo = await resGeo.json();
+// const whereAmI = async function (country) {
+//   try {
+//     // Geo Location
+//     const pos = await getPosition();
+//     const { latitude: lat, longitude: lng } = pos.coords;
+//     // Reverse Coding
+//     const resGeo = await fetch(
+//       `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
+//     );
+//     if (!resGeo.ok) throw new Error(`Problem getting Location Data..`);
+//     const dataGeo = await resGeo.json();
 
-    const res = await fetch(
-      `https://restcountries.com/v3.1/name/${dataGeo.address.country}`,
-    );
-    if (!res.ok) throw new Error(`Problem getting Location Country..`);
-    const data = await res.json();
-    renderCountry(data[0]);
-    return `You are in ${dataGeo.address.village},${dataGeo.address.country}`;
-  } catch (err) {
-    console.error(`${err}💥`);
-    renderError(`Something went to wrong💥${err.message} 
-    `);
-    throw err;
-  }
-};
+//     const res = await fetch(
+//       `https://restcountries.com/v3.1/name/${dataGeo.address.country}`,
+//     );
+//     if (!res.ok) throw new Error(`Problem getting Location Country..`);
+//     const data = await res.json();
+//     renderCountry(data[0]);
+//     return `You are in ${dataGeo.address.village},${dataGeo.address.country}`;
+//   } catch (err) {
+//     console.error(`${err}💥`);
+//     renderError(`Something went to wrong💥${err.message}
+//     `);
+//     throw err;
+//   }
+// };
 
 // const city = whereAmI();
 // console.log(city);
-console.log(`1: Will get Location`);
+// console.log(`1: Will get Location`);
 // whereAmI()
 //   .then(city => console.log(`2: ${city}`))
 //   .catch(err => console.error(`2: ${err.message}`))
@@ -747,11 +747,35 @@ console.log(`1: Will get Location`);
 //   });
 // console.log(`Second`);
 
-(async function () {
-  try{
-   const city = await whereAmI()
-  console.log(`2: ${city}`)
-  }
-  catch(err) { console.error(`2: ${err.message}`)}
-  console.log(`3: Finish getting Location`);
-})();
+// (async function () {
+//   try{
+//    const city = await whereAmI()
+//   console.log(`2: ${city}`)
+//   }
+//   catch(err) { console.error(`2: ${err.message}`)}
+//   console.log(`3: Finish getting Location`);
+// })();
+
+// -----------------------22
+// -------------------------Running Promises in Parallel
+
+// const getJSON = function (url, errorMsg = 'Country Not Found') {
+//   return fetch(url).then(response => {
+//     if (!response.ok) throw new Error(`${errorMsg}     ${response.status}`);
+//     return response.json();
+//   });
+// };
+
+// const get3Countries = async function (c1, c2, c3) {
+//   try {
+//     const data = await Promise.all([
+//       getJSON(`https://restcountries.com/v3.1/name/${c1}`),
+//       getJSON(`https://restcountries.com/v3.1/name/${c2}`),
+//       getJSON(`https://restcountries.com/v3.1/name/${c3}`),
+//     ]);
+//     console.log(data.map( d => d[0].capital[0]));
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+// get3Countries('portugal', 'canada', 'tanzania')
