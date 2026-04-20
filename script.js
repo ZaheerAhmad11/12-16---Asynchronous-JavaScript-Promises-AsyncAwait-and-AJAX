@@ -779,3 +779,103 @@
 //   }
 // };
 // get3Countries('portugal', 'canada', 'tanzania')
+
+// -----------------------23
+// -------------------------Other Promise Combinators race, allSettled and any
+// const getJSON = function (url, errorMsg = 'Country Not Found') {
+//   return fetch(url).then(response => {
+//     if (!response.ok) throw new Error(`${errorMsg}     ${response.status}`);
+//     return response.json();
+//   });
+// };
+///////////////Promise.race()
+// (async function () {
+//   const res = await Promise.race([
+//     getJSON(`https://restcountries.com/v3.1/name/pakistan`),
+//     getJSON(`https://restcountries.com/v3.1/name/italy`),
+//     getJSON(`https://restcountries.com/v3.1/name/india`),
+//   ]);
+//   console.log(res[0]);
+// })();
+
+// const timeout = function (sec) {
+//   return new Promise(function (_, reject) {
+//     setTimeout(function () {
+//       reject(new Error(`Requst Took To Long...`));
+//     }, sec * 1000);
+//   });
+// };
+
+// Promise.race([getJSON(`https://restcountries.com/v3.1/name/italy`), timeout(3)])
+//   .then(res => console.log(res[0]))
+//   .catch(err => console.error(err));
+
+///////////////Promise.allSettled()
+// Promise.allSettled([
+//   Promise.resolve(`Success`),
+//   Promise.reject(`Error`),
+//   Promise.resolve(`Another Success`),
+// ])
+//   .then(res => console.log(res[0]))
+//   .catch(err => console.error(err));
+
+// Promise.all([
+//   Promise.resolve(`Success`),
+//   Promise.reject(`Error`),
+//   Promise.resolve(`Another Success`),
+// ])
+//   .then(res => console.log(res[0]))
+//   .catch(err => console.error(err));
+
+///////////////Promise.any()
+// Promise.any([
+//   Promise.resolve(`Success`),
+//   Promise.reject(`Error`),
+//   Promise.resolve(`Another Success`),
+// ])
+//   .then(res => console.log(res))
+//   .catch(err => console.error(err));
+
+// -----------------------24
+// -------------------------Coding Challenge # 3
+// const imgContainer = document.querySelector('.images');
+// const createImage = function (imgPath) {
+//   return new Promise(function (resolve, reject) {
+//     const img = document.createElement('img');
+//     img.src = imgPath;
+
+//     img.addEventListener('load', function () {
+//       imgContainer.append(img);
+//       resolve(img);
+//     });
+
+//     img.addEventListener('error', function () {
+//       reject(new Error('Image not found'));
+//     });
+//   });
+// };
+
+// const wait = function (seconds) {
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, seconds * 1000);
+//   });
+// };
+
+// /////////////////////////
+// const loadNPuase = async function () {
+//   try {
+//     let img = await createImage('img/img-1.jpg');
+//     console.log('image 1 Loaded');
+//     wait(2);
+//     img.style.display = 'none';
+
+//      img = await createImage('img/img-2.jpg');
+//     console.log('image 2 Loaded');
+//     wait(2);
+//     img.style.display = 'none';
+
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+// loadNPuase()
